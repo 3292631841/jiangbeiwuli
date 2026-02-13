@@ -11,9 +11,8 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    <!-- Bootstrap 图标 + CSS（CDN） -->
+    <!-- Bootstrap 图标（仅用图标，不用模态框） -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         /* 全局基础 */
@@ -28,6 +27,7 @@
             padding-top: 60px !important;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         :root {
@@ -64,6 +64,7 @@
             text-decoration: none;
             margin: 0 15px;
             font-size: 0.9rem;
+            cursor: pointer;
         }
         .nav-links a:hover {
             color: var(--primary-color);
@@ -214,57 +215,84 @@
             color: #fff;
             text-decoration: underline;
             margin-left: 10px;
+            cursor: pointer;
         }
 
-        /* 模态框居中样式（仅保留核心居中，不修改原生结构） */
-        .modal-dialog {
-            display: flex;
+        /* 原生弹窗遮罩（默认隐藏） */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            display: none;
             align-items: center;
-            min-height: calc(100vh - 1rem);
-            margin: 0.5rem auto;
+            justify-content: center;
+            padding: 20px;
         }
-        /* 图片模态框 */
-        #imageModal .modal-content {
-            background: transparent;
-            border: none;
-            box-shadow: none;
-        }
-        #imageModal .modal-body {
-            padding: 0;
-        }
-        #imageModal .modal-img {
+
+        /* 图片弹窗 */
+        .image-modal {
+            background: #fff;
+            border-radius: 4px;
             max-width: 90vw;
             max-height: 80vh;
+            position: relative;
+        }
+        .image-modal img {
+            max-width: 100%;
+            max-height: 80vh;
             object-fit: contain;
-            border: 4px solid #fff;
+        }
+
+        /* PDF弹窗 */
+        .pdf-modal {
+            background: #fff;
             border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-        #imageModal .btn-close {
-            background: rgba(255,255,255,0.9);
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-        }
-        /* PDF模态框 */
-        #pdfModal .modal-content {
-            height: 90vh;
             width: 95vw;
-            max-width: 95vw;
+            height: 90vh;
+            max-width: 1600px;
+            position: relative;
         }
-        #pdfModal .modal-body {
-            padding: 0;
-            height: calc(90vh - 60px);
-        }
-        #pdfViewer {
+        .pdf-modal iframe {
             width: 100%;
-            height: 100%;
+            height: calc(100% - 50px);
             border: none;
         }
+
+        /* 关闭按钮 */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .close-btn:hover {
+            background: #fff;
+        }
+
+        /* PDF错误提示 */
         .pdf-error {
-            text-align: center;
-            padding: 20px;
+            text-align: center !important;
+            padding: 40px 20px;
             color: #666;
+            height: calc(100% - 50px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -274,12 +302,12 @@
         <div class="container">
             <a href="/" class="nav-author">江北</a>
             <div class="nav-links">
-                <a href="#about">关于我</a>
-                <a href="#papers">论文</a>
-                <a href="#letter">给读者的信</a>
-                <a href="#journey">历程</a>
-                <a href="#response">回应与对话</a>
-                <a href="#contact">联系</a>
+                <a onclick="scrollToSection('about')">关于我</a>
+                <a onclick="scrollToSection('papers')">论文</a>
+                <a onclick="scrollToSection('letter')">给读者的信</a>
+                <a onclick="scrollToSection('journey')">历程</a>
+                <a onclick="scrollToSection('response')">回应与对话</a>
+                <a onclick="scrollToSection('contact')">联系</a>
             </div>
         </div>
     </nav>
@@ -291,7 +319,7 @@
 
     <!-- 头像 -->
     <div class="avatar-section">
-        <img src="/static/common/photo.png" class="avatar-img" alt="江北头像" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/common/photo.png">
+        <img src="/static/common/photo.png" class="avatar-img" alt="江北头像" onclick="openImageModal('/static/common/photo.png')">
     </div>
 
     <!-- 主内容 -->
@@ -314,31 +342,31 @@
             <h2 class="section-title"><i class="bi bi-file-text-fill"></i> 论文</h2>
             <div class="paper-item">
                 <p>1. 论文标题：《科学本体论预设的范式革命：非人格意识场显化宇宙》
-                    <span class="view-btn" data-pdf="/static/papers/paper-title.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <span class="view-btn" onclick="openPdfModal('/static/papers/paper-title.pdf')"><i class="bi bi-eye"></i> 查看原稿</span>
                     <a href="/static/papers/paper-title.pdf" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>2. 论文摘要：《科学本体论预设的范式革命：非人格意识场显化宇宙》核心观点凝练
-                    <span class="view-btn" data-pdf="/static/papers/paper-abstract.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <span class="view-btn" onclick="openPdfModal('/static/papers/paper-abstract.pdf')"><i class="bi bi-eye"></i> 查看原稿</span>
                     <a href="/static/papers/paper-abstract.pdf" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>3. 论文全文（核心内容）：《科学本体论预设的范式革命：非人格意识场显化宇宙》主体论证
-                    <span class="view-btn" data-pdf="/static/papers/paper-core.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <span class="view-btn" onclick="openPdfModal('/static/papers/paper-core.pdf')"><i class="bi bi-eye"></i> 查看原稿</span>
                     <a href="/static/papers/paper-core.pdf" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>4. 参考文献：《科学本体论预设的范式革命：非人格意识场显化宇宙》引用文献汇编
-                    <span class="view-btn" data-pdf="/static/papers/paper-references.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <span class="view-btn" onclick="openPdfModal('/static/papers/paper-references.pdf')"><i class="bi bi-eye"></i> 查看原稿</span>
                     <a href="/static/papers/paper-references.pdf" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>5. 论文全文PDF：《科学本体论预设的范式革命：非人格意识场显化宇宙》完整版本
-                    <span class="view-btn" data-pdf="/static/papers/paper-full.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <span class="view-btn" onclick="openPdfModal('/static/papers/paper-full.pdf')"><i class="bi bi-eye"></i> 查看原稿</span>
                     <a href="/static/papers/paper-full.pdf" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
                 </p>
             </div>
@@ -392,7 +420,7 @@
         <section id="journey">
             <h2 class="section-title"><i class="bi bi-pencil-square"></i> 历程</h2>
             <div class="journey-item">
-                <img src="/static/journey/journey1.jpg" class="journey-img" alt="历程1" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/journey/journey1.jpg">
+                <img src="/static/journey/journey1.jpg" class="journey-img" alt="历程1" onclick="openImageModal('/static/journey/journey1.jpg')">
                 <div>
                     <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》初稿完成</h4>
                     <p>日期：2026年1月5日</p>
@@ -400,7 +428,7 @@
                 </div>
             </div>
             <div class="journey-item">
-                <img src="/static/journey/journey2.jpg" class="journey-img" alt="历程2" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/journey/journey2.jpg">
+                <img src="/static/journey/journey2.jpg" class="journey-img" alt="历程2" onclick="openImageModal('/static/journey/journey2.jpg')">
                 <div>
                     <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》终稿完成</h4>
                     <p>日期：2026年2月10日</p>
@@ -408,7 +436,7 @@
                 </div>
             </div>
             <div class="journey-item">
-                <img src="/static/journey/journey3.jpg" class="journey-img" alt="历程3" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/journey/journey3.jpg">
+                <img src="/static/journey/journey3.jpg" class="journey-img" alt="历程3" onclick="openImageModal('/static/journey/journey3.jpg')">
                 <div>
                     <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》正式投稿</h4>
                     <p>日期：2026年2月14</p>
@@ -416,7 +444,7 @@
                 </div>
             </div>
             <div class="journey-item">
-                <img src="/static/journey/journey4.jpg" class="journey-img" alt="历程4" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/journey/journey4.jpg">
+                <img src="/static/journey/journey4.jpg" class="journey-img" alt="历程4" onclick="openImageModal('/static/journey/journey4.jpg')">
                 <div>
                     <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》等待回应</h4>
                     <p>日期：暂无</p>
@@ -439,15 +467,15 @@
                 <h4 style="margin-top: 20px;">近期回应素材</h4>
                 <div class="response-images">
                     <div>
-                        <img src="/static/response/response1.jpg" class="response-img" alt="回应1" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/response/response1.jpg">
+                        <img src="/static/response/response1.jpg" class="response-img" alt="回应1" onclick="openImageModal('/static/response/response1.jpg')">
                         <p class="response-img-caption">学术研讨回应</p>
                     </div>
                     <div>
-                        <img src="/static/response/response2.jpg" class="response-img" alt="回应2" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/response/response2.jpg">
+                        <img src="/static/response/response2.jpg" class="response-img" alt="回应2" onclick="openImageModal('/static/response/response2.jpg')">
                         <p class="response-img-caption">公众疑问解答</p>
                     </div>
                     <div>
-                        <img src="/static/response/response3.jpg" class="response-img" alt="回应3" data-bs-toggle="modal" data-bs-target="#imageModal" data-img="/static/response/response3.jpg">
+                        <img src="/static/response/response3.jpg" class="response-img" alt="回应3" onclick="openImageModal('/static/response/response3.jpg')">
                         <p class="response-img-caption">思想进展补充</p>
                     </div>
                 </div>
@@ -473,111 +501,96 @@
         </div>
     </footer>
 
-    <!-- 图片模态框（Bootstrap原生结构） -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="" class="modal-img" alt="大图">
-                </div>
+    <!-- 原生图片弹窗（默认隐藏） -->
+    <div class="modal-overlay" id="imageModalOverlay">
+        <div class="image-modal">
+            <button class="close-btn" onclick="closeAllModals()">×</button>
+            <img id="modalImage" src="" alt="大图">
+        </div>
+    </div>
+
+    <!-- 原生PDF弹窗（默认隐藏） -->
+    <div class="modal-overlay" id="pdfModalOverlay">
+        <div class="pdf-modal">
+            <button class="close-btn" onclick="closeAllModals()">×</button>
+            <iframe id="pdfIframe" src="" frameborder="0"></iframe>
+            <div id="pdfError" class="pdf-error" style="display: none;">
+                <p>PDF预览失败，请点击下方按钮下载查看</p>
+                <a id="pdfErrorDownload" href="" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
             </div>
         </div>
     </div>
 
-    <!-- PDF模态框（Bootstrap原生结构） -->
-    <div class="modal fade" id="pdfModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-lg-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">查看原稿</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <embed id="pdfViewer" src="" type="application/pdf">
-                    <div class="pdf-error" style="display: none;">
-                        <p>PDF预览失败，请点击下方按钮下载查看</p>
-                        <a href="" class="download-btn" target="_blank"><i class="bi bi-download"></i> 下载原稿</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS（CDN） -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // 保存滚动位置
-        let scrollPos = 0;
+        let scrollPosition = 0;
 
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. 图片模态框 - 原生Bootstrap触发
-            const imageModal = new bootstrap.Modal('#imageModal');
-            // 监听图片模态框显示事件
-            document.getElementById('imageModal').addEventListener('show.bs.modal', function(e) {
-                // 保存当前滚动位置
-                scrollPos = window.scrollY;
-                // 设置模态框图片地址
-                const imgSrc = e.relatedTarget.getAttribute('data-img');
-                this.querySelector('.modal-img').src = imgSrc;
-            });
-            // 监听图片模态框关闭事件 - 恢复滚动位置
-            document.getElementById('imageModal').addEventListener('hidden.bs.modal', function() {
-                window.scrollTo(0, scrollPos);
-            });
+        // 1. 导航平滑滚动
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
 
-            // 2. PDF模态框
-            const pdfModal = new bootstrap.Modal('#pdfModal');
-            const pdfViewer = document.getElementById('pdfViewer');
-            const pdfError = document.querySelector('.pdf-error');
-            const pdfErrorLink = pdfError.querySelector('a');
+        // 2. 打开图片弹窗
+        function openImageModal(imgUrl) {
+            // 保存滚动位置
+            scrollPosition = window.scrollY;
+            // 禁止页面滚动
+            document.body.style.overflow = 'hidden';
+            // 设置图片地址
+            document.getElementById('modalImage').src = imgUrl;
+            // 显示弹窗
+            document.getElementById('imageModalOverlay').style.display = 'flex';
+        }
+
+        // 3. 打开PDF弹窗
+        function openPdfModal(pdfUrl) {
+            // 保存滚动位置
+            scrollPosition = window.scrollY;
+            // 禁止页面滚动
+            document.body.style.overflow = 'hidden';
+            // 重置错误提示
+            document.getElementById('pdfError').style.display = 'none';
+            document.getElementById('pdfIframe').style.display = 'block';
+            // 设置PDF地址
+            document.getElementById('pdfIframe').src = pdfUrl;
+            document.getElementById('pdfErrorDownload').href = pdfUrl;
+            // 显示弹窗
+            document.getElementById('pdfModalOverlay').style.display = 'flex';
             
-            // 绑定论文查看按钮点击事件
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // 保存滚动位置
-                    scrollPos = window.scrollY;
-                    // 获取PDF地址
-                    const pdfUrl = this.getAttribute('data-pdf');
-                    // 重置PDF显示状态
-                    pdfViewer.style.display = 'block';
-                    pdfError.style.display = 'none';
-                    // 设置PDF地址
-                    pdfViewer.src = pdfUrl;
-                    pdfErrorLink.href = pdfUrl;
-                    // 显示PDF模态框
-                    pdfModal.show();
-                    
-                    // 监听PDF加载失败
-                    pdfViewer.onerror = function() {
-                        pdfViewer.style.display = 'none';
-                        pdfError.style.display = 'block';
-                    };
-                });
-            });
+            // 监听PDF加载失败
+            document.getElementById('pdfIframe').onerror = function() {
+                this.style.display = 'none';
+                document.getElementById('pdfError').style.display = 'block';
+            };
+        }
 
-            // PDF模态框关闭 - 恢复滚动位置 + 清空PDF
-            document.getElementById('pdfModal').addEventListener('hidden.bs.modal', function() {
-                window.scrollTo(0, scrollPos);
-                pdfViewer.src = '';
-            });
+        // 4. 关闭所有弹窗
+        function closeAllModals() {
+            // 隐藏所有弹窗
+            document.getElementById('imageModalOverlay').style.display = 'none';
+            document.getElementById('pdfModalOverlay').style.display = 'none';
+            // 恢复页面滚动
+            document.body.style.overflow = '';
+            // 恢复滚动位置
+            window.scrollTo(0, scrollPosition);
+            // 清空PDF地址（避免缓存）
+            document.getElementById('pdfIframe').src = '';
+        }
 
-            // 3. 导航平滑滚动
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
+        // 点击弹窗遮罩空白处关闭弹窗
+        document.getElementById('imageModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeAllModals();
+        });
+        document.getElementById('pdfModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeAllModals();
+        });
+
+        // 按ESC键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAllModals();
         });
     </script>
 </body>
