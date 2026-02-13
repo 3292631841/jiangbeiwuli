@@ -8,15 +8,15 @@
     <title>江北 - 非人格意识场显化宇宙论 官方主页</title>
 
     <!-- 网站图标 -->
-    <link rel="icon" type="image/x-icon" href="static/common/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="./static/common/favicon.ico" />
     <!-- Bootstrap 图标-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Bootstrap 核心CSS（必须先引入，解决模态框样式依赖） -->
+    <!-- Bootstrap 核心CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- 核心样式 -->
-    <link type="text/css" href="static/css/styles.css" rel="stylesheet" />
-    <link type="text/css" href="static/css/main.css" rel="stylesheet" />
+    <link type="text/css" href="./static/css/styles.css" rel="stylesheet" />
+    <link type="text/css" href="./static/css/main.css" rel="stylesheet" />
     
     <!-- 样式：匹配参考图顶部布局 -->
     <style>
@@ -34,11 +34,17 @@
             padding-top: 50px !important;
         }
 
+        /* 模态框打开时禁止背景滚动 */
+        body.modal-open {
+            overflow: hidden !important;
+            padding-right: 0 !important;
+        }
+
         :root {
             --ref-dark-blue: #264DE4;
         }
 
-        /* 1. 顶部导航栏（左边作者名 + 右边导航）- 恢复横板核心样式 */
+        /* 1. 顶部导航栏 */
         .top-nav {
             position: fixed !important;
             top: 0 !important;
@@ -47,16 +53,15 @@
             background-color: #ffffff !important;
             border-bottom: 1px solid #e0e0e0 !important;
             padding: 8px 0 !important;
-            z-index: 9999 !important;
+            z-index: 9999 !important; /* 确保导航栏在最上层 */
         }
         .top-nav .container {
             display: flex !important;
             justify-content: space-between !important;
             align-items: center !important;
-            max-width: 1600px !important; /* 导航栏最大宽度和内容一致 */
+            max-width: 1600px !important;
             width: 95% !important;
             margin: 0 auto !important;
-            /* 新增：覆盖Bootstrap默认的container样式，确保横向 */
             padding-left: 0 !important;
             padding-right: 0 !important;
         }
@@ -67,7 +72,6 @@
             font-weight: bold !important;
             text-decoration: none !important;
         }
-        /* 核心修复：.nav-links强制横向排列 */
         .top-nav .nav-links {
             display: flex !important;
             align-items: center !important;
@@ -81,47 +85,45 @@
             font-size: 0.9rem !important;
             padding: 0 15px !important;
             text-decoration: none !important;
-            /* 新增：确保链接横向排列，无换行 */
             white-space: nowrap !important;
+            cursor: pointer !important; /* 确保可点击 */
         }
         .top-nav .nav-link:hover {
             color: var(--ref-dark-blue) !important;
         }
 
-        /* 2. 顶部横幅图（标题最上方+黑体+白色） */
+        /* 2. 顶部横幅图 */
         .banner-section {
-            background: url(static/common/cover.jpg) no-repeat center center !important;
+            background: url(./static/common/cover.jpg) no-repeat center center !important;
             background-size: cover !important;
             height: 350px !important; 
             display: flex !important;
-            align-items: flex-start !important; /* 调整为顶部对齐 */
-            justify-content: flex-start !important; /* 水平左对齐 */
-            padding: 50px 0 0 0 !important; /* 保留顶部内边距，避免标题贴边 */
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+            padding: 50px 0 0 0 !important;
             width: 100% !important;
         }
-        /* 横幅内容容器，和下方内容对齐 */
         .banner-container {
             max-width: 1600px !important;
             width: 95% !important;
             margin: 0 auto !important;
         }
-        /* 标题：黑体 + 白色 + 顶部对齐 + 左对齐 */
         .banner-title {
-            font-family: "SimHei", "Microsoft YaHei", "PingFang SC", sans-serif !important; /* 黑体 */
+            font-family: "SimHei", "Microsoft YaHei", "PingFang SC", sans-serif !important;
             font-weight: bold !important;
-            color: #ffffff !important; /* 白色 */
+            color: #ffffff !important;
             font-size: 1.8rem !important; 
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important; /* 适配白色标题的阴影 */
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
             margin: 0 !important;
             line-height: 1.8 !important;
         }
 
-        /* 3. 头像区域（可点击放大） */
+        /* 3. 头像区域 */
         .avatar-section {
             margin: -80px 0 40px 0 !important;
             display: flex !important;
             justify-content: flex-end !important;
-            background: url(static/common/avatar-bg.jpg) no-repeat right center !important;
+            background: url(./static/common/avatar-bg.jpg) no-repeat right center !important;
             background-size: cover !important;
             padding: 20px !important;
             border-radius: 4px !important;
@@ -135,7 +137,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
             position: relative !important;
             z-index: 10 !important;
-            cursor: pointer !important; /* 点击放大提示 */
+            cursor: pointer !important; /* 确保可点击 */
         }
 
         /* 4. 容器与板块样式 */
@@ -159,13 +161,12 @@
             gap: 8px !important;
         }
 
-        /* 5. 论文板块 - 简化样式，仅保留标题和按钮 */
+        /* 5. 论文板块 */
         .paper-item {
             margin-bottom: 15px !important;
             padding: 10px 0 !important;
             border-bottom: 1px solid #f0f0f0 !important;
         }
-        /* 查看原稿按钮样式（和下载按钮统一风格，位置在下载前） */
         .view-btn {
             display: inline-block !important;
             margin-left: 10px !important;
@@ -176,14 +177,16 @@
             font-size: 0.85rem !important;
             border: 1px solid #d0d0d0 !important;
             border-radius: 2px !important;
-            cursor: pointer !important;
+            cursor: pointer !important; /* 确保可点击 */
+            z-index: 1 !important; /* 确保按钮可交互 */
+            position: relative !important;
         }
         .view-btn:hover {
             background-color: #dde9fc !important;
         }
         .download-btn {
             display: inline-block !important;
-            margin-left: 5px !important; /* 缩小和查看按钮的间距 */
+            margin-left: 5px !important;
             padding: 3px 8px !important;
             background-color: #f5f5f5 !important;
             color: var(--ref-dark-blue) !important;
@@ -191,34 +194,53 @@
             font-size: 0.85rem !important;
             border: 1px solid #d0d0d0 !important;
             border-radius: 2px !important;
+            cursor: pointer !important; /* 确保可点击 */
+            z-index: 1 !important; /* 确保按钮可交互 */
+            position: relative !important;
         }
         .download-btn:hover {
             background-color: #eeeeee !important;
         }
 
-        /* PDF预览模态框样式（当前页显示，不跳转） */
+        /* PDF预览模态框样式 - 仅调整内容居中，不修改基础定位 */
         #pdfViewModal {
             z-index: 999999 !important;
         }
         #pdfViewModal .modal-dialog {
             max-width: 95vw !important;
             max-height: 90vh !important;
-            margin: 2rem auto !important;
+            margin: 1.75rem auto !important; /* 恢复Bootstrap默认margin */
+            display: flex !important;
+            align-items: center !important;
+            min-height: calc(100vh - 3.5rem) !important; /* 垂直居中 */
         }
         #pdfViewModal .modal-content {
             height: 90vh !important;
+            width: 100% !important;
         }
         #pdfViewModal .modal-body {
             padding: 0 !important;
-            height: calc(90vh - 60px) !important; /* 减去header高度 */
+            height: calc(90vh - 60px) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #pdfViewerContainer {
+            width: 100% !important;
+            height: 100% !important;
         }
         #pdfViewer {
             width: 100% !important;
             height: 100% !important;
             border: none !important;
         }
+        .pdf-load-error {
+            text-align: center !important;
+            color: #666;
+            padding: 20px;
+        }
 
-        /* 6. 历程板块（图片可点击放大） */
+        /* 6. 历程板块 */
         .journey-item {
             display: flex !important;
             gap: 15px !important;
@@ -230,13 +252,13 @@
             object-fit: cover !important;
             border: 1px solid #e0e0e0 !important;
             flex-shrink: 0 !important;
-            cursor: pointer !important; /* 恢复点击放大提示 */
+            cursor: pointer !important; /* 确保可点击 */
         }
         .journey-content {
             flex: 1 !important;
         }
 
-        /* 7. 回应与对话板块（图片可点击放大） */
+        /* 7. 回应与对话板块 */
         .response-images {
             display: flex !important;
             gap: 15px !important;
@@ -248,7 +270,7 @@
             height: 160px !important;
             object-fit: cover !important;
             border: 1px solid #e0e0e0 !important;
-            cursor: pointer !important; /* 恢复点击放大提示 */
+            cursor: pointer !important; /* 确保可点击 */
         }
         .response-img-caption {
             margin-top: 5px !important;
@@ -268,6 +290,7 @@
             text-decoration: none !important;
             margin: 10px 0 !important;
             display: block !important;
+            cursor: pointer !important; /* 确保可点击 */
         }
 
         /* 9. 页脚 */
@@ -290,18 +313,19 @@
             color: #ffffff !important;
             text-decoration: underline !important;
             margin-left: 10px !important;
+            cursor: pointer !important; /* 确保可点击 */
         }
 
-        /* 图片放大模态框样式（统一适配所有图片，修复滚动问题） */
+        /* 图片放大模态框样式 - 仅调整内容居中，不修改基础定位 */
         #imageModal {
-            z-index: 999999 !important; /* 最高层级，避免被遮挡 */
+            z-index: 999999 !important;
         }
         #imageModal .modal-dialog {
-            max-width: 90vw !important; /* 适配屏幕宽度 */
-            margin: 2rem auto !important;
+            max-width: 90vw !important;
+            margin: 1.75rem auto !important; /* 恢复Bootstrap默认margin */
             display: flex !important;
             align-items: center !important;
-            min-height: calc(100vh - 4rem) !important; /* 垂直居中，不影响滚动 */
+            min-height: calc(100vh - 3.5rem) !important; /* 垂直居中 */
         }
         #imageModal .modal-content {
             background-color: transparent !important;
@@ -332,20 +356,27 @@
             width: 30px !important;
             height: 30px !important;
             opacity: 1 !important;
+            cursor: pointer !important; /* 确保可点击 */
         }
 
         /* 给读者的信排版修正 */
         .letter-signature {
-            text-align: right !important; /* 姓名日期右对齐 */
+            text-align: right !important;
             margin-top: 10px !important;
+        }
+
+        /* 模态框遮罩样式优化 */
+        .modal-backdrop {
+            z-index: 999998 !important;
+            opacity: 0.85 !important;
         }
     </style>
 
-    <!-- 核心JS（顺序不可乱） -->
+    <!-- 核心JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script type="text/javascript" src="static/js/marked.min.js"></script>
-    <script type="text/javascript" src="static/js/js-yaml.min.js"></script>
+    <script type="text/javascript" src="./static/js/marked.min.js"></script>
+    <script type="text/javascript" src="./static/js/js-yaml.min.js"></script>
 </head>
 
 <body>
@@ -364,17 +395,17 @@
         </div>
     </nav>
 
-    <!-- 2. 顶部横幅图（标题黑体+白色+左对齐+顶部位置） -->
+    <!-- 2. 顶部横幅图 -->
     <section class="banner-section">
         <div class="banner-container">
             <h1 class="banner-title">科学本体论预设的范式革命：非人格意识场显化宇宙</h1>
         </div>
     </section>
 
-    <!-- 3. 头像区域（可点击放大） -->
+    <!-- 3. 头像区域 -->
     <div class="main-container">
         <div class="avatar-section">
-            <img class="avatar-img" src="static/common/photo.png" alt="江北 头像">
+            <img class="avatar-img" src="./static/common/photo.png" alt="江北 头像">
         </div>
     </div>
 
@@ -397,7 +428,7 @@
         </div>
     </section>
 
-    <!-- 5. 论文板块（仅保留标题，新增查看原稿按钮，删除内容栏） -->
+    <!-- 5. 论文板块 -->
     <section class="section" id="papers">
         <div class="main-container">
             <h2 class="section-title">
@@ -405,40 +436,40 @@
             </h2>
             <div class="paper-item">
                 <p>1. 论文标题：《科学本体论预设的范式革命：非人格意识场显化宇宙》
-                    <span class="view-btn" data-pdf="static/papers/paper-title.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
-                    <a href="static/papers/paper-title.pdf" class="download-btn" target="_blank">
+                    <span class="view-btn" data-pdf="./static/papers/paper-title.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <a href="./static/papers/paper-title.pdf" class="download-btn" target="_blank">
                         <i class="bi bi-download"></i> 下载原稿
                     </a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>2. 论文摘要：《科学本体论预设的范式革命：非人格意识场显化宇宙》核心观点凝练
-                    <span class="view-btn" data-pdf="static/papers/paper-abstract.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
-                    <a href="static/papers/paper-abstract.pdf" class="download-btn" target="_blank">
+                    <span class="view-btn" data-pdf="./static/papers/paper-abstract.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <a href="./static/papers/paper-abstract.pdf" class="download-btn" target="_blank">
                         <i class="bi bi-download"></i> 下载原稿
                     </a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>3. 论文全文（核心内容）：《科学本体论预设的范式革命：非人格意识场显化宇宙》主体论证
-                    <span class="view-btn" data-pdf="static/papers/paper-core.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
-                    <a href="static/papers/paper-core.pdf" class="download-btn" target="_blank">
+                    <span class="view-btn" data-pdf="./static/papers/paper-core.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <a href="./static/papers/paper-core.pdf" class="download-btn" target="_blank">
                         <i class="bi bi-download"></i> 下载原稿
                     </a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>4. 参考文献：《科学本体论预设的范式革命：非人格意识场显化宇宙》引用文献汇编
-                    <span class="view-btn" data-pdf="static/papers/paper-references.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
-                    <a href="static/papers/paper-references.pdf" class="download-btn" target="_blank">
+                    <span class="view-btn" data-pdf="./static/papers/paper-references.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <a href="./static/papers/paper-references.pdf" class="download-btn" target="_blank">
                         <i class="bi bi-download"></i> 下载原稿
                     </a>
                 </p>
             </div>
             <div class="paper-item">
                 <p>5. 论文全文PDF：《科学本体论预设的范式革命：非人格意识场显化宇宙》完整版本
-                    <span class="view-btn" data-pdf="static/papers/paper-full.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
-                    <a href="static/papers/paper-full.pdf" class="download-btn" target="_blank">
+                    <span class="view-btn" data-pdf="./static/papers/paper-full.pdf"><i class="bi bi-eye"></i> 查看原稿</span>
+                    <a href="./static/papers/paper-full.pdf" class="download-btn" target="_blank">
                         <i class="bi bi-download"></i> 下载原稿
                     </a>
                 </p>
@@ -446,7 +477,7 @@
         </div>
     </section>
 
-    <!-- 6. 给读者的信板块（排版修正） -->
+    <!-- 6. 给读者的信板块 -->
     <section class="section" id="reader-letter">
         <div class="main-container">
             <h2 class="section-title">
@@ -456,30 +487,19 @@
                 <div style="background: #ffffff; padding: 20px; border: 1px solid #e0e0e0;">
                     <h3>中文信</h3>
                     <p>致读者：一个关于宇宙的心灵图景</p>
-                    <p>如果您已读至此处，那么您已经完成了一次艰苦的思想攀登。现在，请允许我暂时放下所有严谨的论证，为您描绘一个关于宇宙本身的心灵图景。
-</p>
-                    <p>想象一下，我们的宇宙是一台正在运行的“量子计算机”。 我们所体验的一切物质现实，您正在阅读的文字、所能看到的物体、辽阔的星空。这些都并非静态永恒的存在，而是这台“量子计算机”正在实时渲染出的、无比精密的“画面”。每一刻，这幅画面都在被刷新和确认。
-</p>
-                    <p>物理定律是驱动这台计算机的底层操作系统与核心代码。它们定义了什么是可能的，什么是不可能的。就像我们的电脑为何可以显现出画面，而不是一片混乱。<p>
-                         
-                    <p>“暗物质”，并非某种找不到的奇异粒子，而是尚未被渲染到我们当前“画面”中的、支撑着整个程序运行的后台数据与硬件架构。它们不可见，但却不可或缺，共同构成了整个“计算机”。<p>
-
-                    <p>  而驱动这一切的“电力”，那些让代码运行、让画面得以显现的最根本的“动力”与“可能性”本身，就是我论文中所述的 “非人格意识场”。<p> 
-
-                    <p> 我们正是这台量子计算机当中电力本身的一部分。而我们所体验的一切物质现实，即是它“正在运行”的证明。<p>
-
-                    <p>而没有电力就意味着“计算机”没有渲染出任何的画面，也就没有我们，以及我们所体验到的一切物质现实，宇宙也就没有任何存在可言。<p>
-
-                    <p>于是，宇宙自然可被解释为一个无需外在起源，自身就是以“非人格意识场”为动力，持续进行自我显化的存在。<p>
-
-                    <p>如果您在此感到了某种直觉上的共振，那么我前方那些严谨的论证，便是为您这份直觉所搭建的理性之桥。<p>
-
-                    <p>最后，请不要担心，一切可能都已发生。我们所体会到的每个此时此刻，那才是真正属于我们的独一无二。<p>
-
-                    <p>谨以此献给所有敢于重新想象世界的大脑。 <p>           
-                       
-                    <p>谢谢你们 <p>
-                     <p>&nbsp;&nbsp;此致<br>敬礼<br>
+                    <p>如果您已读至此处，那么您已经完成了一次艰苦的思想攀登。现在，请允许我暂时放下所有严谨的论证，为您描绘一个关于宇宙本身的心灵图景。</p>
+                    <p>想象一下，我们的宇宙是一台正在运行的“量子计算机”。 我们所体验的一切物质现实，您正在阅读的文字、所能看到的物体、辽阔的星空。这些都并非静态永恒的存在，而是这台“量子计算机”正在实时渲染出的、无比精密的“画面”。每一刻，这幅画面都在被刷新和确认。</p>
+                    <p>物理定律是驱动这台计算机的底层操作系统与核心代码。它们定义了什么是可能的，什么是不可能的。就像我们的电脑为何可以显现出画面，而不是一片混乱。</p>
+                    <p>“暗物质”，并非某种找不到的奇异粒子，而是尚未被渲染到我们当前“画面”中的、支撑着整个程序运行的后台数据与硬件架构。它们不可见，但却不可或缺，共同构成了整个“计算机”。</p>
+                    <p>而驱动这一切的“电力”，那些让代码运行、让画面得以显现的最根本的“动力”与“可能性”本身，就是我论文中所述的 “非人格意识场”。</p>
+                    <p>我们正是这台量子计算机当中电力本身的一部分。而我们所体验的一切物质现实，即是它“正在运行”的证明。</p>
+                    <p>而没有电力就意味着“计算机”没有渲染出任何的画面，也就没有我们，以及我们所体验到的一切物质现实，宇宙也就没有任何存在可言。</p>
+                    <p>于是，宇宙自然可被解释为一个无需外在起源，自身就是以“非人格意识场”为动力，持续进行自我显化的存在。</p>
+                    <p>如果您在此感到了某种直觉上的共振，那么我前方那些严谨的论证，便是为您这份直觉所搭建的理性之桥。</p>
+                    <p>最后，请不要担心，一切可能都已发生。我们所体会到的每个此时此刻，那才是真正属于我们的独一无二。</p>
+                    <p>谨以此献给所有敢于重新想象世界的大脑。</p>           
+                    <p>谢谢你们</p>
+                    <p>&nbsp;&nbsp;此致<br>敬礼<br>
                         <div class="letter-signature">江北<br>2026年2月13日</div>
                     </p>
                 </div>
@@ -488,26 +508,16 @@
                     <p>To the Reader: A Landscape of the Mind Regarding the Cosmos</p>
                     <p>If you have read this far, you have already completed a strenuous climb of the mind. Now, allow me to momentarily set aside all rigorous arguments to paint for you a landscape of the mind concerning the universe itself.</p>
                     <p>Imagine our universe as a running “quantum computer.” All the material reality we experience—the words you are reading now, the objects you can see, the vast starry sky—these are not static, eternal existences. Rather, they are the incredibly precise “images” being rendered in real-time by this “quantum computer.” With each moment, this image is being refreshed and confirmed.</p>
-                         
-                    <p>    The laws of physics are the underlying operating system and core code that drive this computer. They define what is possible and what is not, much like why our computers can display coherent images instead of mere chaos.<p>
-
-                    <p>“Dark matter” is not some elusive exotic particle, but rather the background data and hardware architecture that support the entire program’s operation, data not yet rendered into our current “image.” Though invisible, it is indispensable, collectively forming the entire “computer.”<p>
-
-                    <p>And the “electricity” that powers all of this—the most fundamental “motive force” and “possibility” itself that makes the code run and the images manifest—is what I refer to in my thesis as the “impersonal consciousness field.”<p>
-
-                    <p>We are, in fact, part of this very electricity within the quantum computer. And all the material reality we experience is proof that it is “currently running.”<p>
-
-                    <p>Without this electricity, there would be no image rendered by the “computer,” no us, and none of the material reality we experience. The universe would have no existence to speak of.<p>
-
-                    <p>Thus, the universe can naturally be understood as an entity requiring no external origin. It is, in itself, an existence continuously engaged in self-manifestation, powered by the “impersonal consciousness field.”<p>
-
-                   <p>If you feel a certain intuitive resonance here, then the rigorous arguments laid out earlier in my work are precisely the bridge of reason built for that intuition of yours.<p>
-
-                   <p>Finally, please do not worry. Everything that can happen, already has. Every “here and now” we truly experience—that is what is genuinely and uniquely ours.<p>
-
-                   <p>This is dedicated to all minds daring enough to reimagine the world.<p>
- 
-                  <p>&nbsp;&nbsp;Sincerely,<br>
+                    <p>The laws of physics are the underlying operating system and core code that drive this computer. They define what is possible and what is not, much like why our computers can display coherent images instead of mere chaos.</p>
+                    <p>“Dark matter” is not some elusive exotic particle, but rather the background data and hardware architecture that support the entire program’s operation, data not yet rendered into our current “image.” Though invisible, it is indispensable, collectively forming the entire “computer.”</p>
+                    <p>And the “electricity” that powers all of this—the most fundamental “motive force” and “possibility” itself that makes the code run and the images manifest—is what I refer to in my thesis as the “impersonal consciousness field.”</p>
+                    <p>We are, in fact, part of this very electricity within the quantum computer. And all the material reality we experience is proof that it is “currently running.”</p>
+                    <p>Without this electricity, there would be no image rendered by the “computer,” no us, and none of the material reality we experience. The universe would have no existence to speak of.</p>
+                    <p>Thus, the universe can naturally be understood as an entity requiring no external origin. It is, in itself, an existence continuously engaged in self-manifestation, powered by the “impersonal consciousness field.”</p>
+                    <p>If you feel a certain intuitive resonance here, then the rigorous arguments laid out earlier in my work are precisely the bridge of reason built for that intuition of yours.</p>
+                    <p>Finally, please do not worry. Everything that can happen, already has. Every “here and now” we truly experience—that is what is genuinely and uniquely ours.</p>
+                    <p>This is dedicated to all minds daring enough to reimagine the world.</p>
+                    <p>&nbsp;&nbsp;Sincerely,<br>
                         <div class="letter-signature">Jiang Bei<br>2026.2.13</div>
                     </p>
                 </div>
@@ -515,14 +525,14 @@
         </div>
     </section>
 
-    <!-- 7. 历程板块（图片可点击放大） -->
+    <!-- 7. 历程板块 -->
     <section class="section" id="journey">
         <div class="main-container">
             <h2 class="section-title">
                 <i class="bi bi-pencil-square"></i> 历程
             </h2>
             <div class="journey-item">
-                <img class="journey-img" src="static/journey/journey1.jpg" alt="历程图片1">
+                <img class="journey-img" src="./static/journey/journey1.jpg" alt="历程图片1">
                 <div class="journey-content">
                     <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》初稿完成</h4>
                     <p>日期：2026年1月5日</p>
@@ -530,35 +540,33 @@
                 </div>
             </div>
             <div class="journey-item">
-                <img class="journey-img" src="static/journey/journey2.jpg" alt="历程图片2">
+                <img class="journey-img" src="./static/journey/journey2.jpg" alt="历程图片2">
                 <div class="journey-content">
                     <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》终稿完成</h4>
                     <p>日期：2026年2月10日</p>
                     <p>状态：终稿已排版完成，准备正式投稿。</p>
                 </div>
             </div>
-         <!-- 新增：正式投稿中 -->
         <div class="journey-item">
-            <img class="journey-img" src="static/journey/journey3.jpg" alt="历程图片3">
+            <img class="journey-img" src="./static/journey/journey3.jpg" alt="历程图片3">
             <div class="journey-content">
                 <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》正式投稿</h4>
                 <p>日期：2026年2月14</p>
                 <p>状态：已向目标期刊完成正式投稿，等待平台审核受理。</p>
             </div>
         </div>
-        <!-- 新增：等待回应中 -->
         <div class="journey-item">
-            <img class="journey-img" src="static/journey/journey4.jpg" alt="历程图片4">
+            <img class="journey-img" src="./static/journey/journey4.jpg" alt="历程图片4">
             <div class="journey-content">
                 <h4>《科学本体论预设的范式革命：非人格意识场显化宇宙》等待回应</h4>
                 <p>日期：暂无</p>
                 <p>状态：暂无</p>
             </div>
         </div>
-    </div>
+        </div>
     </section>
 
-    <!-- 8. 回应与对话板块（图片可点击放大） -->
+    <!-- 8. 回应与对话板块 -->
     <section class="section" id="response">
         <div class="main-container">
             <h2 class="section-title">
@@ -576,18 +584,19 @@
                 <h4 style="margin-top: 20px;">近期回应素材</h4>
                 <div class="response-images">
                     <div>
-                        <img class="response-img" src="static/response/response1.jpg" alt="回应素材1">
+                        <img class="response-img" src="./static/response/response1.jpg" alt="回应素材1">
                         <p class="response-img-caption">学术研讨回应</p>
                     </div>
                     <div>
-                        <img class="response-img" src="static/response/response2.jpg" alt="回应素材2">
+                        <img class="response-img" src="./static/response/response2.jpg" alt="回应素材2">
                         <p class="response-img-caption">公众疑问解答</p>
                     </div>
                     <div>
-                        <img class="response-img" src="static/response/response3.jpg" alt="回应素材3">
+                        <img class="response-img" src="./static/response/response3.jpg" alt="回应素材3">
                         <p class="response-img-caption">思想进展补充</p>
                     </div>
                 </div>
+            </div>
         </div>
     </section>
 
@@ -613,7 +622,7 @@
         </div>
     </footer>
 
-    <!-- 图片放大模态框 -->
+    <!-- 图片放大模态框（默认隐藏，恢复Bootstrap原生结构） -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -627,7 +636,7 @@
         </div>
     </div>
 
-    <!-- PDF预览模态框（当前页显示，不跳转） -->
+    <!-- PDF预览模态框（默认隐藏，恢复Bootstrap原生结构） -->
     <div class="modal fade" id="pdfViewModal" tabindex="-1" aria-labelledby="pdfViewModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -636,15 +645,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <embed id="pdfViewer" src="" type="application/pdf">
+                    <div id="pdfViewerContainer">
+                        <embed id="pdfViewer" src="" type="application/pdf">
+                        <div class="pdf-load-error" style="display: none;">
+                            <p>PDF预览失败，请点击下方按钮下载查看</p>
+                            <a href="" class="download-btn" target="_blank">
+                                <i class="bi bi-download"></i> 下载原稿
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 页面脚本 -->
+    <!-- 页面脚本 - 恢复所有交互功能，保留位置记忆 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 保存滚动位置的变量
+            let scrollPosition = 0;
+
             // 1. 导航锚点平滑跳转
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -662,45 +682,72 @@
                 });
             });
 
-            // 2. 图片放大模态框逻辑
+            // 2. 图片放大模态框逻辑 - 恢复交互+位置记忆
             const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
             const modalImg = document.querySelector('#imageModal .modal-img');
             const clickableImages = document.querySelectorAll('.avatar-img, .journey-img, .response-img');
+            
             clickableImages.forEach(img => {
                 img.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const currentScroll = window.scrollY;
+                    // 保存当前滚动位置
+                    scrollPosition = window.scrollY;
+                    // 设置模态框图片
                     modalImg.src = this.src;
                     modalImg.alt = this.alt;
+                    // 显示模态框
                     imageModal.show();
-                    document.getElementById('imageModal').addEventListener('hidden.bs.modal', function() {
-                        window.scrollTo({
-                            top: currentScroll,
-                            behavior: 'auto'
-                        });
-                    }, { once: true });
                 });
             });
 
-            // 3. PDF查看模态框逻辑（核心：当前页显示，不跳转）
+            // 图片模态框关闭时恢复滚动位置
+            document.getElementById('imageModal').addEventListener('hidden.bs.modal', function() {
+                // 恢复滚动位置
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'auto'
+                });
+            });
+
+            // 3. PDF查看模态框逻辑 - 恢复交互+位置记忆
             const pdfModal = new bootstrap.Modal(document.getElementById('pdfViewModal'));
             const pdfViewer = document.getElementById('pdfViewer');
+            const pdfLoadError = document.querySelector('.pdf-load-error');
+            const pdfErrorDownloadBtn = pdfLoadError.querySelector('.download-btn');
             const viewBtns = document.querySelectorAll('.view-btn');
+            
+            // 监听PDF加载失败事件
+            pdfViewer.addEventListener('error', function() {
+                pdfViewer.style.display = 'none';
+                pdfLoadError.style.display = 'block';
+            });
             
             viewBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // 获取绑定的PDF链接（和下载链接完全一致）
+                    // 保存当前滚动位置
+                    scrollPosition = window.scrollY;
+                    // 获取PDF链接
                     const pdfUrl = this.getAttribute('data-pdf');
-                    // 设置PDF预览地址
+                    // 重置PDF容器状态
+                    pdfViewer.style.display = 'block';
+                    pdfLoadError.style.display = 'none';
+                    // 设置PDF地址
                     pdfViewer.src = pdfUrl;
-                    // 显示PDF预览模态框
+                    pdfErrorDownloadBtn.href = pdfUrl;
+                    // 显示模态框
                     pdfModal.show();
                 });
             });
 
-            // 关闭PDF模态框时清空src，避免缓存
+            // PDF模态框关闭时恢复滚动位置
             document.getElementById('pdfViewModal').addEventListener('hidden.bs.modal', function() {
+                // 清空PDF src避免缓存
                 pdfViewer.src = '';
+                // 恢复滚动位置
+                window.scrollTo({
+                    top: scrollPosition,
+                    behavior: 'auto'
+                });
             });
         });
     </script>
